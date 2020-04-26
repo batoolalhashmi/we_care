@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">We Care</string>
+    <string name="times_notified_today">Today\'s Notifications</string>
+    <string name="default_number_04" translatable="false">04</string>
+    <string name="weekly_avg">Weekly Average</string>
+    <string name="default_number_03" translatable="false">03</string>
+    <string name="daily_data">Daily Data</string>
+    <string name="day">Day</string>
+
+
+    <string-array name="months">
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+    <string name="notification">We care</string>
+    <string name="notification_channel_description">This channel used for displaying notification</string>
+    <string name="change_lang_text">change language</string>
+    <string name="select_date">Select Date</string>
+
+    <string-array name="suggestions">
+        <item> you spend long time using phone , what about walking?</item>
+        <item>Time to take a rest</item>
+        <item>you spend long time using phone , try to take break </item>
+        <item>you spend long time using phone , Lets move your body</item>
+    </string-array>
+
+    <string-array name="languages">
+        <item>العربية</item>
+        <item>English</item>
+    </string-array>
+</resources>

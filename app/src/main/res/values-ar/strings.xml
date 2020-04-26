@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">صحتك تهمنا</string>
+    <string name="times_notified_today">تنبيهات اليوم</string>
+    <string name="weekly_avg">معد الأسبوع</string>
+    <string name="daily_data">البيانات اليومية</string>
+    <string name="day">اليوم</string>
+
+
+
+    <string name="notification">صحتك تهمنا</string>
+    <string name="notification_channel_description">هذه القناة تستخدم لإظهار التنبيهات</string>
+
+    <string-array name="suggestions">
+        <item> لقد قضيت وقتا طويلا في استخدام الجهاز , ما رأيك بالمشي قليلا؟!</item>
+        <item>الوقت المناسب لاخذ استراحة</item>
+        <item>لقد قضيت وقتا طويلا في استخدام الجهاز ,حاول ان تأخذ استراحة</item>
+        <item>لقد قضيت وقتا طويلا في استخدام الجهاز ,فلتجرب اغماض عينيك واخذ نفس عميق</item>
+    </string-array>
+    <string name="change_lang_text">تغيير اللغة</string>
+
+</resources>
+
