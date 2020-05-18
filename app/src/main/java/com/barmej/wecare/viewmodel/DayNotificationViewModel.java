@@ -1,10 +1,8 @@
 package com.barmej.wecare.viewmodel;
 
 import android.app.Application;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -16,14 +14,15 @@ import java.util.List;
 public class DayNotificationViewModel extends AndroidViewModel {
     private NotificationRepository repository;
     private LiveData<DailyNotification> getSelectedData;
-    private LiveData<List<String>> getDate;
-    private LiveData<List<Integer>> getAllData;
+    private LiveData<List<String>> getDates;
+    private LiveData<List<Integer>> getNumberOfNotifications;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public DayNotificationViewModel(@NonNull Application application) {
         super(application);
         repository = NotificationRepository.getInstance(application);
-        getDate = repository.getDate();
+        getDates = repository.getDates();
+
     }
 
     public LiveData<DailyNotification> getSelectedDay(String date) {
@@ -31,8 +30,8 @@ public class DayNotificationViewModel extends AndroidViewModel {
         return getSelectedData;
     }
 
-    public LiveData<List<String>> getDate() {
-        return getDate;
+    public LiveData<List<String>> getDates() {
+        return getDates;
     }
 
     public DailyNotification getDailyNotification(String date) {
@@ -40,9 +39,9 @@ public class DayNotificationViewModel extends AndroidViewModel {
         return getDailyNotification;
     }
 
-    public LiveData<List<Integer>> getAllData() {
-        getAllData = repository.getAllData();
-        return getAllData;
+    public LiveData<List<Integer>> getNumberOfNotifications(String currentDate, String dateBeforeWeek) {
+        getNumberOfNotifications = repository.getNumberOfNotifications(currentDate, dateBeforeWeek);
+        return getNumberOfNotifications;
     }
 
 }

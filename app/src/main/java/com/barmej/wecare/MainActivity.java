@@ -18,26 +18,35 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.barmej.wecare.data.DailyNotification;
 import com.barmej.wecare.databinding.ActivityMainBinding;
-import com.barmej.wecare.startnotification.StartNotificationUtils;
+import com.barmej.wecare.notificationservice.BootService;
 import com.barmej.wecare.utils.LocaleHelper;
 import com.barmej.wecare.utils.NotificationUtils;
 import com.barmej.wecare.viewmodel.DayNotificationViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-
+    private static final int WEEK_DAY = 7;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         Button dailyData = findViewById(R.id.daily_data);
+
+        Calendar calender = Calendar.getInstance();
+        calender.setTime(new Date());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         final String currentDate = simpleDateFormat.format(new Date());
+        calender.add(Calendar.DAY_OF_YEAR, + 1 );
+        final String tomorrow = simpleDateFormat.format(calender.getTime());
+        calender.add(Calendar.DAY_OF_YEAR, -7);
+        final String dateBeforeWeek = simpleDateFormat.format(calender.getTime());
+
         DayNotificationViewModel dayNotificationViewModel = ViewModelProviders.of(this).get(DayNotificationViewModel.class);
         dayNotificationViewModel.getSelectedDay(currentDate).observe(this, new Observer<DailyNotification>() {
             @Override
@@ -45,19 +54,18 @@ public class MainActivity extends AppCompatActivity {
                 binding.setDailyNotification(dailyNotification);
             }
         });
-        dayNotificationViewModel.getAllData().observe(this, new Observer<List<Integer>>() {
+        dayNotificationViewModel.getNumberOfNotifications(dateBeforeWeek,tomorrow).observe(this, new Observer<List<Integer>>() {
             @Override
             public void onChanged(List<Integer> notifications) {
-                if (notifications.size() > 8) {
-                    int sum = 0;
-                    for (int i = notifications.size() - 1; i > notifications.size() - 8; i--) {
+                int sum = 0;
+                   for(int i = 0; i < notifications.size() ; i++) {
                         sum += notifications.get(i);
                     }
-                    int average = sum / 7;
+                int average = sum / WEEK_DAY;
                     String stringAverage = String.valueOf(average);
                     binding.weeklyAverage.setText(stringAverage);
                 }
-            }
+
         });
         dailyData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         NotificationUtils.createNotificationChannel(this);
-        StartNotificationUtils.scheduleNotification(this);
+        startForegroundService(new Intent(this, BootService.class));
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

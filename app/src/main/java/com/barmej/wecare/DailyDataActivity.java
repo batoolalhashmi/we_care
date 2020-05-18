@@ -36,21 +36,15 @@ public class DailyDataActivity extends AppCompatActivity implements AdapterView.
         daySpinner = findViewById(R.id.day_spinner);
         notificationRepository = NotificationRepository.getInstance(this);
         dayNotificationViewModel = ViewModelProviders.of(this).get(DayNotificationViewModel.class);
-        dayNotificationViewModel.getDate().observe(this, new Observer<List<String>>() {
+        dayNotificationViewModel.getDates().observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> dates) {
                 mDates.clear();
-                if (dates.size() > 8) {
-                    for (int i = dates.size() - 1; i > dates.size() - 8; i--) {
-                        mDates.add(dates.get(i));
-                    }
-                } else {
-                    mDates.addAll(dates);
-                }
+                mDates.addAll(dates);
             }
         });
         mDates = new ArrayList<>();
-        mDates.add("Select Date");
+        mDates.add(getString(R.string.select_date));
         dateAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, mDates);
         dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.barmej.wecare">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
             android:allowBackup="true"
@@ -18,9 +19,16 @@
         </activity>
         <activity android:name="com.barmej.wecare.DailyDataActivity">
         </activity>
-        <service android:name=".startnotification.StartNotificationIntentService"
-            android:enabled="false"
+        <service android:name=".notificationservice.BootService"
+            android:enabled="true"
             android:exported="false"/>
+        <receiver android:name=".notificationservice.BootCompletedIntentReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

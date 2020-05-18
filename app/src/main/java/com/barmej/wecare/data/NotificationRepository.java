@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 
 import com.barmej.wecare.data.database.DayNotificationDao;
 import com.barmej.wecare.data.database.DayNotificationDatabase;
-import com.barmej.wecare.startnotification.StartNotificationUtils;
 
 import java.util.List;
 
@@ -15,8 +14,8 @@ public class NotificationRepository {
     private static final Object LOCK = new Object();
     private static NotificationRepository sInstance;
     private LiveData<DailyNotification> getSelectedData;
-    private LiveData<List<String>> getDate;
-    private LiveData<List<Integer>> getAllData;
+    private LiveData<List<String>> getDates;
+    private LiveData<List<Integer>> getNumberOfNotifications;
     private DayNotificationDao dayNotificationDao;
     private DayNotificationDatabase database;
 
@@ -33,8 +32,7 @@ public class NotificationRepository {
     public NotificationRepository(Context context) {
         database = DayNotificationDatabase.getInstance(context);
         dayNotificationDao = database.dayNotificationDao();
-        StartNotificationUtils.startNotification(context);
-        getDate = dayNotificationDao.getDate();
+        getDates = dayNotificationDao.getDates();
     }
 
 
@@ -53,8 +51,8 @@ public class NotificationRepository {
         return getSelectedData;
     }
 
-    public LiveData<List<String>> getDate() {
-        return getDate;
+    public LiveData<List<String>> getDates() {
+        return getDates;
     }
 
     public DailyNotification getDailyNotification(String date) {
@@ -62,9 +60,9 @@ public class NotificationRepository {
         return getDailyNotification;
     }
 
-    public LiveData<List<Integer>> getAllData() {
-        getAllData = dayNotificationDao.getAllData();
-        return getAllData;
+    public LiveData<List<Integer>> getNumberOfNotifications(String currentDate, String dateBeforeWeek) {
+        getNumberOfNotifications = dayNotificationDao.getNumberOfNotifications(currentDate , dateBeforeWeek);
+        return getNumberOfNotifications;
     }
 
     private static class insertDayAsyncTask extends AsyncTask<DailyNotification, Void, Void> {
