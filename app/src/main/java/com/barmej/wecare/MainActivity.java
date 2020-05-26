@@ -42,10 +42,16 @@ public class MainActivity extends AppCompatActivity {
         calender.setTime(new Date());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         final String currentDate = simpleDateFormat.format(new Date());
-        calender.add(Calendar.DAY_OF_YEAR, + 1 );
-        final String tomorrow = simpleDateFormat.format(calender.getTime());
-        calender.add(Calendar.DAY_OF_YEAR, -7);
-        final String dateBeforeWeek = simpleDateFormat.format(calender.getTime());
+
+        Calendar tomorrowDate = Calendar.getInstance();
+        tomorrowDate.setTime(new Date());
+        tomorrowDate.add(Calendar.DAY_OF_YEAR, + 1 );
+        final String tomorrow = simpleDateFormat.format(tomorrowDate.getTime());
+
+        Calendar beforeWeekDate = Calendar.getInstance();
+        beforeWeekDate.setTime(new Date());
+        beforeWeekDate.add(Calendar.DAY_OF_YEAR, -7);
+        final String dateBeforeWeek = simpleDateFormat.format(beforeWeekDate.getTime());
 
         DayNotificationViewModel dayNotificationViewModel = ViewModelProviders.of(this).get(DayNotificationViewModel.class);
         dayNotificationViewModel.getSelectedDay(currentDate).observe(this, new Observer<DailyNotification>() {
@@ -76,9 +82,8 @@ public class MainActivity extends AppCompatActivity {
         });
         NotificationUtils.createNotificationChannel(this);
         startForegroundService(new Intent(this, BootService.class));
-
-
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

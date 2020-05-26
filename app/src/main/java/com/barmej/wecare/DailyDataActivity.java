@@ -54,10 +54,14 @@ public class DailyDataActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onItemSelected(final AdapterView<?> adapterView, View view, final int position, long l) {
-        selectedDate = mDates.get(position);
-        if (selectedDate != null) {
-            DailyNotification dailyNotification = dayNotificationViewModel.getDailyNotification(selectedDate);
-            binding.setDailyNotification(dailyNotification);
+        if (mDates.size() >= 1) {
+            selectedDate = mDates.get(position);
+            if (selectedDate != null) {
+                DailyNotification dailyNotification = dayNotificationViewModel.getDailyNotification(selectedDate);
+                binding.setDailyNotification(dailyNotification);
+            }
+        }else{
+            mDates.add(getString(R.string.no_data));
         }
     }
 

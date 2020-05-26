@@ -1,12 +1,12 @@
 package com.barmej.wecare.data;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
 import com.barmej.wecare.data.database.DayNotificationDao;
 import com.barmej.wecare.data.database.DayNotificationDatabase;
+import com.barmej.wecare.utils.AppExecutor;
 
 import java.util.List;
 
@@ -18,6 +18,7 @@ public class NotificationRepository {
     private LiveData<List<Integer>> getNumberOfNotifications;
     private DayNotificationDao dayNotificationDao;
     private DayNotificationDatabase database;
+    private AppExecutor mAppExecutor;
 
     public static NotificationRepository getInstance(Context context) {
         if (sInstance == null) {
@@ -33,18 +34,26 @@ public class NotificationRepository {
         database = DayNotificationDatabase.getInstance(context);
         dayNotificationDao = database.dayNotificationDao();
         getDates = dayNotificationDao.getDates();
+        mAppExecutor = AppExecutor.getInstance();
     }
 
-
-    public void insert(DailyNotification dailyNotification) {
-
-        new insertDayAsyncTask(dayNotificationDao).execute(dailyNotification);
+    public void insert(final DailyNotification dailyNotification) {
+        mAppExecutor.getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                database.dayNotificationDao().addDayNotificationNumber(dailyNotification);
+            }
+        });
     }
 
-    public void update(DailyNotification dailyNotification) {
-        new updateDayAsyncTask(dayNotificationDao).execute(dailyNotification);
+    public void update(final DailyNotification dailyNotification) {
+        mAppExecutor.getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                database.dayNotificationDao().updateDayNotificationNumber(dailyNotification);
+            }
+        });
     }
-
 
     public LiveData<DailyNotification> getSelectedDay(String date) {
         getSelectedData = dayNotificationDao.getSelectedDay(date);
@@ -56,41 +65,12 @@ public class NotificationRepository {
     }
 
     public DailyNotification getDailyNotification(String date) {
-        DailyNotification getDailyNotification = dayNotificationDao.day(date);
+        DailyNotification getDailyNotification = dayNotificationDao.getDailyNotifications(date);
         return getDailyNotification;
     }
 
     public LiveData<List<Integer>> getNumberOfNotifications(String currentDate, String dateBeforeWeek) {
-        getNumberOfNotifications = dayNotificationDao.getNumberOfNotifications(currentDate , dateBeforeWeek);
+        getNumberOfNotifications = dayNotificationDao.getNumberOfNotifications(currentDate, dateBeforeWeek);
         return getNumberOfNotifications;
-    }
-
-    private static class insertDayAsyncTask extends AsyncTask<DailyNotification, Void, Void> {
-        private DayNotificationDao dayNotificationDao;
-
-        private insertDayAsyncTask(DayNotificationDao dayNotificationDao) {
-            this.dayNotificationDao = dayNotificationDao;
-
-        }
-
-        @Override
-        protected Void doInBackground(final DailyNotification... dailyNotifications) {
-            dayNotificationDao.addDayNotificationNumber(dailyNotifications[0]);
-            return null;
-        }
-    }
-
-    private static class updateDayAsyncTask extends AsyncTask<DailyNotification, Void, Void> {
-        private DayNotificationDao dayNotificationDao;
-
-        private updateDayAsyncTask(DayNotificationDao dayNotificationDao) {
-            this.dayNotificationDao = dayNotificationDao;
-        }
-
-        @Override
-        protected Void doInBackground(final DailyNotification... dailyNotifications) {
-            dayNotificationDao.updateDayNotificationNumber(dailyNotifications[0]);
-            return null;
-        }
     }
 }

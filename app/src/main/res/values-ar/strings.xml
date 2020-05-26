@@ -19,6 +19,8 @@
     </string-array>
     <string name="change_lang_text">تغيير اللغة</string>
     <string name="select_date">اختر اليوم</string>
+    <string name="no_data">لا يوجد بيانات متوفرة</string>
+    <string name="notification_message">صحتك تهمنا</string>
 
 </resources>
 

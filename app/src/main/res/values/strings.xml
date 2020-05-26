@@ -28,6 +28,7 @@
     <string name="change_lang_text">change language</string>
     <string name="select_date">Select Date</string>
     <string name="notification_message">we care</string>
+    <string name="no_data">no data available</string>
 
     <string-array name="suggestions">
         <item> you spend long time using phone , what about walking?</item>
